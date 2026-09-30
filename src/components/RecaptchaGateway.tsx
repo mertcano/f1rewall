@@ -40,7 +40,13 @@ export default function RecaptchaGateway({
 
       const data = await response.json()
 
-      if (data.success && data.inviteUrl) {
+      // Validate the invite URL format before redirecting so a compromised
+      // or malformed API response cannot turn this page into an open redirect.
+      if (
+        data.success &&
+        typeof data.inviteUrl === 'string' &&
+        /^https:\/\/discord\.gg\/[A-Za-z0-9-]+$/.test(data.inviteUrl)
+      ) {
         onSuccess?.()
         // Redirect to Discord invite
         window.location.href = data.inviteUrl

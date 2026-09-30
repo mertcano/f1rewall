@@ -65,20 +65,20 @@ DARK_THEME=false
 ### 4. Running the Application
 
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (uses the pinned pnpm lockfile)
+pnpm install --frozen-lockfile
 
 # Run development server (with Turbopack)
-npm run dev
+pnpm run dev
 
 # Build for production (with Turbopack)
-npm run build
+pnpm run build
 
 # Start production server
-npm start
+pnpm start
 
 # Lint code
-npm run lint
+pnpm run lint
 ```
 
 ## API Routes
@@ -87,10 +87,12 @@ npm run lint
 
 ## Security Features
 
-- Environment variable validation at startup
+- Per-request environment variable validation via `getConfig()`
 - Single-use Discord invites with 5-minute expiration
-- reCAPTCHA verification before invite generation
-- Proper error handling and logging
+- reCAPTCHA verification before invite generation with single-use token tracking
+- Per-IP rate limiting on the verify endpoint
+- Bounded upstream timeouts for Google/Discord calls
+- Strict invite URL validation before client redirect
 - No sensitive data stored in client
 
 ## Deployment

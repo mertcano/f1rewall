@@ -36,6 +36,27 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  // Security headers applied to every route. Content-Security-Policy is kept
+  // permissive enough for reCAPTCHA and configured branding images; tighten
+  // script-src/style-src further when no inline styles are required.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          {
+            key: 'Content-Security-Policy',
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com; frame-src https://www.google.com; connect-src 'self' https://www.google.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'",
+          },
+        ],
+      },
+    ]
+  },
 };
 
 export default nextConfig;

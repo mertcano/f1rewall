@@ -6,7 +6,9 @@ export default function Home() {
   let config
   try {
     config = getConfig()
-  } catch (error) {
+  } catch {
+    // Return a generic message so deployment misconfiguration cannot be
+    // enumerated through the error text (for example missing token names).
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center p-8">
@@ -14,7 +16,7 @@ export default function Home() {
             Configuration Error
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            {error instanceof Error ? error.message : 'Please check your environment variables'}
+            Service temporarily unavailable. Please try again later.
           </p>
         </div>
       </div>
